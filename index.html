@@ -9,10 +9,9 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
 
     <style>
         :root {
@@ -801,7 +800,7 @@
             border: 2px solid var(--gold);
         }
 
-        .author-info h4 {
+        .author-info .author-name {
             font-size: 1rem;
             font-weight: 500;
             margin-bottom: 0.25rem;
@@ -868,12 +867,13 @@
             max-width: 300px;
         }
 
-        .footer-links h4 {
+        .footer-links .footer-title {
             font-size: 0.8rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--gold);
             margin-bottom: 1.5rem;
+            font-weight: 600;
         }
 
         .footer-links ul { list-style: none; }
@@ -1239,7 +1239,7 @@
                 <div class="testimonial-author">
                     <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&q=80" alt="Sarah Mitchell" class="author-avatar">
                     <div class="author-info">
-                        <h4>Sarah Mitchell</h4>
+                        <p class="author-name">Sarah Mitchell</p>
                         <span>First-time European Traveler</span>
                     </div>
                 </div>
@@ -1266,7 +1266,7 @@
                 <p>Transforming European dreams into reality since 2015. Your trusted partner for seamless Schengen visa processing.</p>
             </div>
             <div class="footer-links">
-                <h4>Services</h4>
+                <h3 class="footer-title">Services</h3>
                 <ul>
                     <li><a href="#">Tourist Visa</a></li>
                     <li><a href="#">Business Visa</a></li>
@@ -1275,7 +1275,7 @@
                 </ul>
             </div>
             <div class="footer-links">
-                <h4>Company</h4>
+                <h3 class="footer-title">Company</h3>
                 <ul>
                     <li><a href="#">About Us</a></li>
                     <li><a href="#">Our Process</a></li>
@@ -1284,7 +1284,7 @@
                 </ul>
             </div>
             <div class="footer-links">
-                <h4>Support</h4>
+                <h3 class="footer-title">Support</h3>
                 <ul>
                     <li><a href="#">FAQ</a></li>
                     <li><a href="#">Documentation</a></li>
@@ -1319,18 +1319,29 @@
     </div>
 
     <script>
+        // Wait for GSAP to load
+        function waitForGSAP(callback) {
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                callback();
+            } else {
+                setTimeout(function() { waitForGSAP(callback); }, 50);
+            }
+        }
+
         window.addEventListener('load', function() {
-            setTimeout(function() {
-                gsap.to('#preloader', {
-                    opacity: 0,
-                    duration: 0.8,
-                    ease: 'power2.inOut',
-                    onComplete: function() {
-                        document.getElementById('preloader').style.display = 'none';
-                        initAnimations();
-                    }
-                });
-            }, 2200);
+            waitForGSAP(function() {
+                setTimeout(function() {
+                    gsap.to('#preloader', {
+                        opacity: 0,
+                        duration: 0.8,
+                        ease: 'power2.inOut',
+                        onComplete: function() {
+                            document.getElementById('preloader').style.display = 'none';
+                            initAnimations();
+                        }
+                    });
+                }, 800);
+            });
         });
 
         var cursorOuter = document.querySelector('.cursor-outer');
@@ -1476,5 +1487,9 @@
             });
         });
     </script>
+    
+    <!-- GSAP Scripts - Loaded at end to prevent render blocking -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
 </body>
 </html>
